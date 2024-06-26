@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "247460752397",
+    "project_id": "test-esp32-c0e99",
+    "storage_bucket": "test-esp32-c0e99.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:247460752397:android:ab174862c95eb8ac2c3944",
+        "android_client_info": {
+          "package_name": "com.example.usb32"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAUdyS2QYtaVGhnO_2iAgF7TDoZZTc3-4Y"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
