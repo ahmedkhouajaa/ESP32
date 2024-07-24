@@ -1,5 +1,6 @@
-
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:usb32/admin.dart';
 import 'package:usb32/auth_provider.dart';
 import 'package:usb32/forgetpassword_screen.dart';
 import 'package:usb32/homepage.dart';
@@ -16,10 +17,9 @@ class SignInScreen extends StatefulWidget {
 class _SignInScreenState extends State<SignInScreen> {
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
-  final String _email = "";
-  final String _password = "";
   bool isLoading = false;
-  static final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+  GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+
   @override
   Widget build(BuildContext context) {
     double width = MediaQuery.of(context).size.width;
@@ -49,19 +49,22 @@ class _SignInScreenState extends State<SignInScreen> {
                       ),
                       child: Padding(
                         padding: const EdgeInsets.fromLTRB(0, 0, 0, 8),
-                        child: Text('LOGIN',
-
+                        child: Text(
+                          'LOGIN',
+                          style: TextStyle(
+                            fontSize: 24,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
                       ),
-                    )
-                     )     ],
+                    ),
+                  ],
                 ),
               ),
               Container(
-                // height: height,
                 margin: EdgeInsets.only(top: 100),
                 width: width,
                 padding: EdgeInsets.symmetric(horizontal: width * 0.05),
-
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
@@ -87,13 +90,11 @@ class _SignInScreenState extends State<SignInScreen> {
                               shadowColor: Colors.black38,
                               child: TextFormField(
                                 controller: _emailController,
-                                
                                 decoration: InputDecoration(
                                   contentPadding: EdgeInsets.zero,
                                   prefixIcon: Container(
                                     height: height,
-                                    margin:
-                                        EdgeInsets.only(right: width * 0.01),
+                                    margin: EdgeInsets.only(right: width * 0.01),
                                     width: width * 0.1,
                                     decoration: const BoxDecoration(
                                         color: Color.fromRGBO(5, 25, 55, 1),
@@ -105,14 +106,12 @@ class _SignInScreenState extends State<SignInScreen> {
                                       color: Colors.white,
                                     ),
                                   ),
-                                  hintText: '  Email Id',
-                                 
+                                  hintText: 'Email Id',
                                   enabledBorder: OutlineInputBorder(
                                     borderSide: const BorderSide(
                                         width: 1, color: Colors.transparent),
                                     borderRadius: BorderRadius.circular(5),
                                   ),
-                                  // focusColor: purple,
                                   focusedBorder: OutlineInputBorder(
                                     borderSide: const BorderSide(
                                         color: Colors.transparent, width: 2),
@@ -136,7 +135,6 @@ class _SignInScreenState extends State<SignInScreen> {
                               child: TextFormField(
                                 controller: _passwordController,
                                 obscureText: true,
-                                
                                 decoration: InputDecoration(
                                   contentPadding: EdgeInsets.zero,
                                   prefixIcon: Container(
@@ -146,17 +144,14 @@ class _SignInScreenState extends State<SignInScreen> {
                                         borderRadius: BorderRadius.only(
                                             topLeft: Radius.circular(5),
                                             bottomLeft: Radius.circular(5))),
-                                    margin:
-                                        EdgeInsets.only(right: width * 0.01),
+                                    margin: EdgeInsets.only(right: width * 0.01),
                                     width: width * 0.1,
                                     child: const Icon(
                                       Icons.lock,
                                       color: Colors.white,
                                     ),
                                   ),
-
-                                  hintText: '  Password',
-                                 
+                                  hintText: 'Password',
                                   filled: true,
                                   fillColor: Colors.white,
                                   enabledBorder: OutlineInputBorder(
@@ -164,7 +159,6 @@ class _SignInScreenState extends State<SignInScreen> {
                                         width: 0, color: Colors.transparent),
                                     borderRadius: BorderRadius.circular(5),
                                   ),
-                                  // focusColor: purple,
                                   focusedBorder: OutlineInputBorder(
                                     borderSide: const BorderSide(
                                         color: Colors.transparent, width: 2),
@@ -201,54 +195,67 @@ class _SignInScreenState extends State<SignInScreen> {
                         alignment: Alignment.centerLeft,
                         child: Text(
                           'Forgot password?',
-                        
+                          style: TextStyle(
+                            color: Colors.blue,
+                            fontSize: 16,
+                          ),
                         ),
                       ),
                     ),
-                    SizedBox(height: 20,),
-                     
+                    SizedBox(height: 20),
                     SizedBox(height: width * 0.08),
                     SizedBox(
                       height: width * 0.12,
                       width: width,
                       child: ElevatedButton(
                         style: ElevatedButton.styleFrom(
-                          foregroundColor: Colors.white, backgroundColor: const Color.fromRGBO(5, 25, 55, 1),
+                          foregroundColor: Colors.white,
+                          backgroundColor: const Color.fromRGBO(5, 25, 55, 1),
                           minimumSize: Size(width, height * 0.06),
                           maximumSize: Size(width, height * 0.06),
-                          // foreground
                         ),
                         onPressed: () {
-                          // Navigator.of(context).push(MaterialPageRoute(
-                          //     builder: (context) => HomeScreen()));
-
                           setState(() {
                             isLoading = true;
                           });
 
-                          AuthClass()
-                              .signIN(_emailController.text.trim(),
-                                  _passwordController.text.trim())
-                              .then((value) {
-                            if (value == "Welcome" &&
-                                _emailController.text.isNotEmpty &&
-                                _passwordController.text.isNotEmpty) {
-                              setState(() {
-                                isLoading = false;
-                              });
-                              Navigator.pushAndRemoveUntil(
-                                  context,
-                                  MaterialPageRoute(
-                                      builder: (context) => MyHomePage()),
-                                  (route) => false);
-                            } else {
-                              setState(() {
-                                isLoading = false;
-                              });
-                              ScaffoldMessenger.of(context)
-                                  .showSnackBar(SnackBar(content: Text(value)));
-                            }
-                          });
+                          if (_emailController.text.trim() == 'admin@gmail.com' &&
+                              _passwordController.text.trim() == 'Admin123.') {
+                            setState(() {
+                              isLoading = false;
+                            });
+                            Navigator.pushAndRemoveUntil(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => AdminPage()),
+                                (route) => false);
+                          } else {
+                            AuthClass()
+                                .signIN(_emailController.text.trim(),
+                                    _passwordController.text.trim())
+                                .then((value) {
+                              if (value == "Welcome" &&
+                                  _emailController.text.isNotEmpty &&
+                                  _passwordController.text.isNotEmpty) {
+                                setState(() {
+                                  isLoading = false;
+                                });
+                                Navigator.pushAndRemoveUntil(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) => HomePage(
+                                              userId: FirebaseAuth.instance.currentUser!.uid,
+                                            )),
+                                    (route) => false);
+                              } else {
+                                setState(() {
+                                  isLoading = false;
+                                });
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                    SnackBar(content: Text(value)));
+                              }
+                            });
+                          }
                         },
                         child: const Text(
                           'LOGIN',
@@ -259,30 +266,24 @@ class _SignInScreenState extends State<SignInScreen> {
                       ),
                     ),
                     SizedBox(height: width * 0.05),
-                     GestureDetector(
+                    GestureDetector(
                       onTap: () {
                         Navigator.of(context).push(MaterialPageRoute(
                             builder: (context) => SignUpScreen()));
                       },
-                      child: GestureDetector(
-                        onTap: () {
-                          Navigator.of(context).push(MaterialPageRoute(
-                              builder: (context) => SignUpScreen()));
-                        },
-                        child: RichText(
-                          text: TextSpan(
-                            text: 'Not a Member ? ',
-                            style: TextStyle(color: Colors.black),
-                            children: [
-                              TextSpan(
-                                text: ' Sign up',
-                                style: TextStyle(color: Colors.blue),
-                              ),
-                            ],
-                          ),
+                      child: RichText(
+                        text: TextSpan(
+                          text: 'Not a Member ? ',
+                          style: TextStyle(color: Colors.black),
+                          children: [
+                            TextSpan(
+                              text: ' Sign up',
+                              style: TextStyle(color: Colors.blue),
+                            ),
+                          ],
                         ),
                       ),
-                    )
+                    ),
                   ],
                 ),
               ),
@@ -293,3 +294,4 @@ class _SignInScreenState extends State<SignInScreen> {
     );
   }
 }
+
